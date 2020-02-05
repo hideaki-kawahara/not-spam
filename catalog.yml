@@ -3,7 +3,8 @@ PREDEF:
 
 CHAPS:
   - chap01-starter.re
-  - chap02-faq.re
+  - chap02-filter.re
+  - chap03-white.re
 
 APPENDIX:
 
