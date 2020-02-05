@@ -2098,8 +2098,7 @@ $ rake pdf    # または STARTER_TARGET=pbook rake pdf
 $ STARTER_TARGET=ebook rake pdf
 //}
 
-ただしこの機能では、@<LaTeX>{}のスタイルファイル（@<code>{sty/starter.sty}や@<code>{sty/mytextsize.sty}）の中で行える範囲でしか変更はできません。それ以上のことがしたい場合は、@<secref>{chap02-faq|qvtlq}を参照してください。
-
+ただしこの機能では、@<LaTeX>{}のスタイルファイル（@<code>{sty/starter.sty}や
 
 ==={vb2z3} @<LaTeX>{}コマンドの実行回数を減らす
 
