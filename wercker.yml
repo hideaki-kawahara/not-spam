@@ -1,9 +1,0 @@
-box: kauplan/review2.5
-
-build:
-  steps:
-    - script:
-        name: Build PDF
-        code: |
-          rake clean pdf
-          cp not-spam.pdf ${WERCKER_REPORT_ARTIFACTS_DIR}/
