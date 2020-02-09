@@ -2,7 +2,7 @@ PREDEF:
   - chap00-preface.re
 
 CHAPS:
-  - chap01-starter.re
+  - chap01-delete.re
   - chap02-filter.re
   - chap03-white.re
 
