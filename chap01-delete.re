@@ -45,5 +45,5 @@ saitama9876     地名＋電話番号下4桁
 一番オススメなメールアドレスはランダムに作ることです。
 LastPassサイトのユーザー名ジェネレータツール@<href>{https://www.lastpass.com/ja/username-generator, https://www.lastpass.com/ja/username-generator}で、ユーザー名の長さを16文字にして、読みやすいを選択し、使用文字を「大文字」「小文字」「数字」するのがベストなメールアドレスになります。
 
-//image[lastpass][ランダムなメールアドレスを作成する例]{
+//image[lastpass][ランダムなメールアドレスを作成する例][scale=0.5]{
 //}
