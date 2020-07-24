@@ -7,7 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: docker://kauplan/review2.5
-      - run: docker run --rm -v $PWD:/work -w /work kauplan/review2.5 rake pdf
+      - run: docker run --rm -v $PWD:/work kauplan/review2.5 /bin/bash -c "cd /work; rake pdf"
       - name: Get Repository Name
         id: Repository
         run: echo ::set-output name=name::${GITHUB_REPOSITORY##*/}
