@@ -26,7 +26,7 @@ language: ja
 # 読みを入れる例 booktitle: {name: "Re:VIEW EPUBサンプル", file-as: "リビューイーパブサンプル"}
 # （タイトルやサブタイトルが長い場合は、好みの箇所に改行を入れてください。）
 booktitle: |-
-  迷惑メール対策本
+  迷惑メール徹底攻略
 subtitle: |-
   みんなで対策して迷惑メールを減らそう！
 
@@ -65,7 +65,7 @@ aut:
 # a-pht, pht: 撮影責任者
 # a-pbl, pbl: 出版社（発行所）
 # a-prt, prt: 印刷所
-prt: ○○印刷所
+prt: 印刷所
 # a-red, red: 項目の枠組起草者
 # a-rev, rev: 評論者
 # a-spn, spn: 援助者
@@ -74,14 +74,14 @@ prt: ○○印刷所
 # a-trl, trl: 翻訳者
 
 # 刊行日(省略した場合は実行時の日付)
-date: 2020-03-01
+date: 2020-09-29
 # 発行年月。YYYY-MM-DD形式による配列指定。省略した場合はdateを使用する
 # 複数指定する場合は次のように記述する
 # [["初版第1刷の日付", "初版第2刷の日付"], ["第2版第1刷の日付"]]
 # 日付の後ろを空白文字で区切り、任意の文字列を置くことも可能。
-history: [["2020-03-01 ver 1.0"]]
+history: [["2020-09-29 ver 1.0"]]
 # [experimental] 新刊を頒布したイベント名（例：「技術書典6（2019年春）新刊」）
-pubevent_name: 技術書典8（2020年春）新刊
+pubevent_name: 技術書典9（2020年秋）新刊
 # 権利表記(配列で複数指定可)
 rights: (C) 2020 ブライトシステム
 # description: 説明
@@ -119,8 +119,8 @@ toclevel: 3               # （部と）章と節と項（小節）を目次に�
 # 採番の設定。採番させたくない見出しには「==[nonum]」のようにnonum指定をする
 #
 # 本文でセクション番号を表示する見出しレベル
-#secnolevel: 2             # 章 (Chapter) と節 (Section) にだけ番号をつける
-secnolevel: 3              # 項 (Subsection) にも番号をつける
+secnolevel: 2              # 章 (Chapter) と節 (Section) にだけ番号をつける
+#secnolevel: 3             # 項 (Subsection) にも番号をつける
 
 # 以下のsecnolevelはまだ未実装。
 # 前付でセクション番号を表示する見出しレベル(未実装)
@@ -196,7 +196,7 @@ titlepage: true
 # ディレクトリに置かなければならず、カレントディレクトリには一切置いては
 # ならない。
 # contentdir: null
-# contentdir: contents
+contentdir: contents
 
 # 1ページの行数文字数と1kbごとのページ数を用紙サイズで指定する(A5 or B5)。
 # page_metric: A5
@@ -298,24 +298,23 @@ texstyle: [reviewmacro, starter, mystyle, mytitlepage, mycolophon]
 #
 # LaTeX用のdocumentclassを指定する
 # texdocumentclass: ["jsbook", "uplatex,oneside"]
+# 用紙サイズとフォントサイズは config-starter.yml で指定するので、'a5j' や '9pt' などは指定しないこと
 texdocumentclass: ["jsbook",
-    #"uplatex,papersize,twoside,b5j,10pt,openright" # B5 10pt 右起こし
-    #"uplatex,papersize,twoside,b5j,10pt,openany"   # B5 10pt 両起こし
-    #"uplatex,papersize,twoside,a5j,9pt,openright"  # A5  9pt 右起こし
-    #"uplatex,papersize,twoside,a5j,9pt,openany"    # A5  9pt 両起こし
-    #"uplatex,papersize,oneside,a5j,10pt,openany"   # A5 10pt 両起こし（タブレット向け）
-    "uplatex,papersize,twoside,a5j,9pt,openright"
+    #"dvipdfmx,uplatex,papersize,twoside,openright" # 右起こし
+    #"dvipdfmx,uplatex,papersize,twoside,openany"   # 両起こし
+    #"dvipdfmx,uplatex,papersize,oneside,openany"   # 両起こし（タブレット向け）
+    "dvipdfmx,uplatex,papersize,twoside,openright"
 ]
 #
 # LaTeX用のコマンドを指定する
-# texcommand: "uplatex"
+texcommand: uplatex
 #
 # LaTeXのコマンドに渡すオプションを指定する
 # texoptions: null
 texoptions: "-halt-on-error -file-line-error"  # エラー時にインタラクティブモードにしない、エラー箇所はファイル名つきで表示
 #
 # LaTeX用のdvi変換コマンドを指定する(dvipdfmx)
-# dvicommand: "dvipdfmx"
+dvicommand: dvipdfmx
 #
 # LaTeX用のdvi変換コマンドのオプションを指定する
 dvioptions: "-d 5 -z 3"  # -z 9 だと画像を最大圧縮する（ただし時間がかかる）
@@ -349,11 +348,20 @@ pdfmaker:
   colophon: true
   #
   # 表紙に配置し、書籍の影絵にも利用する画像ファイル。同人誌の印刷では一般的に、表紙は本文と別ファイルにするので、ここはnullにする。
-  coverimage: null
+  #coverimage: null
+  ### Starterでは、表紙をPDFで用意してください。電子用PDFでのみ挿入されます。
+  ### ・デフォルトでは印刷用PDFファイルが生成させるので挿入されません。
+  ### ・config-starter.ymlで「target: ebook」を設定するか、または
+  ###   環境変数「STARTER_TARGET=ebook」を設定すると電子用になり、
+  ###   表紙PDFが挿入されます。
+  ### ・表紙用PDFファイルは images/ フォルダ直下に置いてください。
+  coverpdf_files: [cover_a5.pdf]  # PDFファイル名（複数指定可）（PNGやJPGはダメ）
+  backcoverpdf_files: []  # 裏表紙のPDFファイル名（複数指定可）（PNGやJPGはダメ）
+  coverpdf_option: "offset=-2.3mm 2.3mm" # 必要に応じて微調整すること
   #
   # pdfmaker:階層を使うものはここまで
 
-## @chapref<>{} や @<hd>{} で、章(Chapter)や節(Section)へのリンクを作成
+## @<chapref>{} や @<hd>{} で、章(Chapter)や節(Section)へのリンクを作成
 ## （Re:VIEW の機能だがドキュメントには未記載？）
 chapterlink: true
 

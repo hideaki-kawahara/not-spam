@@ -2,8 +2,30 @@
 
 ## based on Re:VIEW 2.4
 
+def xelatex?()
+  @texcompiler == 'xelatex'
+end
+
+case @dvicommand
+when 'dvipdfmx'
+  dvipdfmx  = 'dvipdfmx'
+  dvipdfmx_ = 'dvipdfmx,'
+when nil, ''
+  dvipdfmx  = ''
+  dvipdfmx_ = ''
+else
+  dvipdfmx  = 'dvipdfmx'
+  dvipdfmx_ = 'dvipdfmx,'
+end
+
+pagesize = @config['starter']['pagesize']  # A5 or B5
+fontsize = @config['starter']['fontsize']  # 9pt or 10pt
+docopts = [@documentclassoption]
+docopts << "#{pagesize.downcase}paper"  # a5paper or b5paper
+docopts << fontsize                     # 9pt or 10pt
+
 %>
-\documentclass[dvipdfmx,<%= @documentclassoption %>]{<%= @documentclass %>}
+\documentclass[<%= docopts.join(',') %>]{<%= @documentclass %>}
 % %% fixes to LaTeX2e
 % \usepackage{fix-cm}[2006/09/13 v1.1m]
 % \usepackage{fixltx2e}[2006/09/13 v1.1m]
@@ -11,6 +33,7 @@
 
 %% copy values from 'config-starter.yml'
 \makeatletter
+<%- length_keys = ['caption_needspace', 'program_widen', 'terminal_widen'] -%>
 <%- @config['starter'].each do |k, v| -%>
 <%-   if k == 'target' -%>
 <%-     target = ENV['STARTER_TARGET'].to_s -%>
@@ -19,7 +42,15 @@
 <%-     v = v == true ? 'Y' : v == false ? '' : v.to_s -%>
 <%-   end -%>
 <%-   if v =~ /\A[-a-zA-Z0-9!'`*+,.\/:;=?@\[\]()]*\z/ -%>
-\def\starter@<%= k.gsub('_', '@') %>{<%= v %>}
+<%-     x = 'starter@' + k.gsub('_', '@') -%>
+<%-     if length_keys.include?(k) -%>
+<%-       #v = v.sub(/\b(z[wh])$/, '\\zw') -%>
+%\def\<%= x %>{<%= v %>}
+\newlength{\<%= x %>}
+\setlength{\<%= x %>}{<%= v %>}
+<%-     else -%>
+\def\<%= x %>{<%= v %>}
+<%-     end -%>
 <%-   end -%>
 <%- end -%>
 \makeatother
@@ -38,19 +69,21 @@
 
 <%- if @texcompiler == "uplatex" -%>
 \usepackage[deluxe,uplatex]{otf}
+<%- elsif @texcompiler == "xelatex" -%>
+%\usepackage[deluxe]{otf}
 <%- else -%>
 \usepackage[deluxe]{otf}
 <%- end -%>
 \usepackage{caption}
 \usepackage{suffix}
 \usepackage[T1]{fontenc}\usepackage{textcomp}%T1/TS1
-\usepackage{lmodern}
+%\usepackage{lmodern}
 <%- if ! ENV['STARTER_DRAFT'].to_s.empty? || @config['starter']['draft'] -%>
-\usepackage[dvipdfmx,draft]{graphicx}
+\usepackage[<%= dvipdfmx_ %>draft]{graphicx}
 <%- else -%>
-\usepackage[dvipdfmx]{graphicx}
+\usepackage[<%= dvipdfmx %>]{graphicx}
 <%- end -%>
-\usepackage[dvipdfmx,table]{xcolor}%requires colortbl, array
+\usepackage[<%= dvipdfmx_ %>table]{xcolor}%requires colortbl, array
 \usepackage{framed}
 \usepackage{wrapfig}
 \definecolor{shadecolor}{gray}{0.9}
@@ -64,6 +97,7 @@
 \usepackage{float}
 \usepackage{alltt}
 \usepackage{amsmath}
+\usepackage{pdfpages}     % provides '\includepdf' command
 
 %% if you use @<u>{} (underline), use jumoline.sty
 \IfFileExists{jumoline.sty}{
@@ -84,10 +118,14 @@
 \setlength{\footskip}{30pt}
 
 %% Bookmarkの文字化け対策（日本語向け）
-\usepackage[dvipdfmx,bookmarks=true,bookmarksnumbered=true,colorlinks=true,%
+\usepackage[<%= dvipdfmx_ %>bookmarks=true,bookmarksnumbered=true,colorlinks=true,%
      pdftitle={<%= escape_latex(@config.name_of("booktitle")) %>},%
      pdfauthor={<%= escape_latex(@config.names_of("aut").join(I18n.t("names_splitter"))) %>}]{hyperref}
-\usepackage[dvipdfmx]{pxjahyper}
+<%- if xelatex?() -%>
+%\usepackage[<%= dvipdfmx %>]{pxjahyper}
+<%- else -%>
+\usepackage[<%= dvipdfmx %>]{pxjahyper}
+<%- end -%>
 
 <%- if ["utbook", "tbook"].include?(@documentclass)  -%>
 \newcommand{\headfont}{\gtfamily\sffamily\bfseries}
@@ -160,11 +198,17 @@
   \medskip\small\begin{framed}\setlength{\baselineskip}{1.3zw}\begin{alltt}}{%
   \end{alltt}\end{framed}}
 
+%\newenvironment{reviewtable}[1]{%
+%  \begin{center}\small\setlength{\baselineskip}{1.2zw}
+%    \begin{tabular}{#1}}{%
+%    \end{tabular}
+%  \end{center}}
 \newenvironment{reviewtable}[1]{%
-  \begin{center}\small\setlength{\baselineskip}{1.2zw}
-    \begin{tabular}{#1}}{%
-    \end{tabular}
-  \end{center}}
+  \small\setlength{\baselineskip}{1.2zw}%
+  \begin{tabular}{#1}%
+}{%
+  \end{tabular}%
+}
 
 \newenvironment{reviewcolumn}{%
      \begin{framed}
@@ -240,7 +284,7 @@
 %%%% for jumoline.sty:
 %%\renewcommand{\reviewstrike}[1]{\Middleline{#1}}
 
-\newcommand{\reviewth}[1]{\textgt{#1}}
+\newcommand{\reviewth}[1]{{\gtfamily\sffamily\bfseries #1}}
 \newcommand{\reviewtitlefont}[0]{\usefont{T1}{phv}{b}{n}\gtfamily}
 \newcommand{\reviewmainfont}[0]{}
 \newcommand{\reviewcolophon}[0]{\clearpage}
@@ -288,6 +332,10 @@
   \fi
 }
 
+%% true between '\appendix' and ''
+\newif\if@appendix
+\@appendixfalse
+
 \makeatother
 
 <%- if @config["texstyle"] -%>
@@ -300,9 +348,34 @@
 \makeindex
 <%- end -%>
 
+<% if @config['secnolevel'] %>
+\setcounter{secnumdepth}{<%= @config['secnolevel'] - 1 %>}
+<% end %>
+
+
 \begin{document}
 
 \reviewmainfont
+
+<%-
+    ## 表紙用PDFファイルを読み込む
+    include_pdffiles = proc do |pdf_files|
+      if ENV['STARTER_CHAPTER'].to_s.empty?
+        target = ENV['STARTER_TARGET']; target = nil if target.to_s.empty?
+        target ||= (@config['starter'] || {})['target']
+        p = target == "ebook" ? '' : '%'
+        [pdf_files].flatten.compact.each do |pdf_file|
+ -%>
+  <%= p %>\includepdf[<%= @config["coverpdf_option"] %>]{./<%= @config["imagedir"] %>/<%= pdf_file %>}
+  <%= p %>\addtocounter{page}{-1}
+<%-
+        end
+      end
+    end
+ -%>
+<%- include_pdffiles.call(@config["coverpdf_files"]) -%>
+
+%
 
 <%- if @config["titlepage"] -%>
 %%%
@@ -381,7 +454,9 @@
 <%= @input_files["CHAPS"] %>
 %\renewcommand{\chaptermark}[1]{\markboth{\appendixname\thechapter~#1}{}}
 \reviewappendix
+\makeatletter\@appendixtrue\makeatother
 <%= @input_files["APPENDIX"] %>
+\makeatletter\@appendixfalse\makeatother
 
 %% backmatter begins
 <%- if @input_files["POSTDEF"].present? # or @config["colophon"] -%>
@@ -464,5 +539,8 @@
 <%- if @config["backcover"] -%>
 <%= @custom_backcoverpage %>
 <%- end -%>
+
+<%- ## 裏表紙用PDFファイルを読み込む -%>
+<%- include_pdffiles.call(@config["backcoverpdf_files"]) -%>
 
 \end{document}

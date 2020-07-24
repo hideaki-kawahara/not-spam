@@ -49,8 +49,8 @@
   %%% または
   %\begin{tabular}{ll}
   %  著　者  & 〈著者名〉\\
-  %          & @〈Twitter〉 \\
-  %          & 〈URL〉 \\
+  %          & \hyperref{https://twitter.com/〈Twitter〉}{@〈Twitter〉} \\
+  %          & \url{〈URL〉} \\
   %  印刷所  & 〈印刷業者〉 \\
   %\end{tabular}
   \vspace{2mm}                   % 縦方向のスペース
@@ -73,4 +73,9 @@
     \fi
   }
 
+}
+
+%%% 奥付の「著者」や「印刷所」を表示
+\newcommand{\startercolophonrow}[2]{%
+  \textgt{#1} & #2 \\
 }
