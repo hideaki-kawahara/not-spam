@@ -4,7 +4,7 @@ PREDEF:
 CHAPS:
   - chap01-delete.re
   - chap02-filter.re
-  - chap03-white.re
+  - chap03-allow_list.re
 
 APPENDIX:
 
