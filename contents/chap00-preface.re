@@ -2,10 +2,17 @@
 == 21世紀も使われるメール
 2020年はリモートワークが一般的になった年、SlackやMicrosoft TeamsやZoomのようなコミュニケーションツールを使うようになっても、そのツールを使うときや新たな利用者を招待するときなどでは@<b>{メール}を使用します。
 
-そしてGoogleはGmailを基本としたコミュニケーションツールの発表@<fn>{gmail}をしました。
+GoogleはGmailというコアサービスを武器に、以下のようなコミュニケーションツールを買収または開発し続けています。残念ながら上手くいっていませんが、2020年7月15日にGoogleはGmailを基本としたコミュニケーションツールの発表@<fn>{gmail}をしました。
 
+ * Google Wave（2010年終了）
+ * Google Buzz（2011年11月終了）
+ * Orkut（2014年終了）
+ * Google Spaces（2017年4月終了）
+ * Google+（一般向け2019年4月終了、企業向け2020年7月終了→Google Currentsへ名称変更）
 
+そして
 
+Microsoftも、Outlook.comをベースにOffice Onlineを統合し、そこからコミュニケーションツールとしてのハブ機能を持たせています。
 
 //footnote[gmail][「Gmail」が刷新、コラボレーションのハブに--Slackやマイクロソフトに対抗 @<href>{https://japan.cnet.com/article/35156848/}]
 
