@@ -1,2 +1,7 @@
-not-spam.pdf
-not-spam-pdf/
+.DS_Store
+*~
+*.bak
+*.yml.orig
+*.erb.orig
+tmp/*
+not-spam-pdf/*

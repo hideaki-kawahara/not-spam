@@ -52,16 +52,16 @@ starter:
 
   ## ページ先頭なら節や項のタイトルの前にスペースを入れない
   ## （obsolete: 現在は常にtrue扱い）
-  section_notopmargin: true
+  section_notopmargin: false
 
   ## 節 (Section) タイトルの装飾
   ## （none: なし、underline: 下線、grayback: 灰色の背景色、leftline: 左に縦線, numbox: 節番号を黒背景に）
   ## （節タイトルが長くて二行になる場合は「leftline」または「numbox」がお勧め）
-  section_decoration: numbox
+  section_decoration: grayback
 
   ## 項 (Subsection) タイトルの装飾
   ## （none: なし、symbol: 先頭にクローバー）
-  subsection_decoration: symbol
+  subsection_decoration: none
 
   ## プログラムやターミナルのキャプションを小さくするか？
   caption_small: false
